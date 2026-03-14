@@ -35,8 +35,8 @@ export function SuperSidebar({ user }: SuperSidebarProps) {
         </div>
         <Button 
           variant="ghost" 
-          size="icon" 
-          className="text-white hover:bg-white/5" 
+          size="sm" 
+          className="w-10 h-10 p-0 text-white hover:bg-white/5" 
           onClick={() => setIsOpen(true)}
         >
           <Menu className="h-6 w-6" />
@@ -68,8 +68,8 @@ export function SuperSidebar({ user }: SuperSidebarProps) {
           </div>
           <Button 
             variant="ghost" 
-            size="icon" 
-            className="text-zinc-500 hover:text-white lg:hidden"
+            size="sm" 
+            className="w-9 h-9 p-0 text-zinc-500 hover:text-white lg:hidden"
             onClick={() => setIsOpen(false)}
           >
             <X className="h-5 w-5" />

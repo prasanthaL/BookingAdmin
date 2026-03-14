@@ -36,8 +36,8 @@ export function DashboardSidebar({ business, user, role, initials }: DashboardSi
         </div>
         <Button 
           variant="ghost" 
-          size="icon" 
-          className="text-white hover:bg-zinc-900" 
+          size="sm" 
+          className="w-10 h-10 p-0 text-white hover:bg-zinc-900" 
           onClick={() => setIsOpen(true)}
         >
           <Menu className="h-6 w-6" />
@@ -68,8 +68,8 @@ export function DashboardSidebar({ business, user, role, initials }: DashboardSi
           </div>
           <Button 
             variant="ghost" 
-            size="icon" 
-            className="ml-auto text-zinc-500 hover:text-white hover:bg-zinc-900 lg:hidden"
+            size="sm" 
+            className="ml-auto w-9 h-9 p-0 text-zinc-500 hover:text-white hover:bg-zinc-900 lg:hidden"
             onClick={() => setIsOpen(false)}
           >
             <X className="h-5 w-5" />
