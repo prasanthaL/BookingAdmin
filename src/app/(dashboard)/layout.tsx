@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { LogoutButton } from "@/components/layout/logout-button";
 import { prisma } from "@/lib/prisma";
+import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -44,49 +45,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .slice(0, 2);
 
   return (
-    <div className="flex min-h-screen bg-zinc-50/50">
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 w-68 bg-zinc-950 text-zinc-400">
-        <div className="flex h-16 items-center px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
-              <Building2 className="h-5 w-5" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-white">
-              {business.name}
-            </span>
-          </div>
-        </div>
-
-        <div className="px-4 py-4">
-          <button className="flex w-full items-center justify-between rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white ring-1 ring-zinc-800 transition-all hover:bg-zinc-800">
-            <span className="truncate">{business.name}</span>
-            <ChevronDown className="h-4 w-4 shrink-0 text-zinc-500" />
-          </button>
-        </div>
-
-        <div className="flex flex-col justify-between h-[calc(100vh-140px)]">
-          <SidebarNav />
-
-          <div className="mt-auto px-4 pb-6">
-            <div className="flex items-center gap-3 rounded-2xl bg-zinc-900/50 p-3 ring-1 ring-zinc-800/50">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 font-bold text-white shadow-lg shadow-blue-600/20 text-sm">
-                {initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="truncate text-xs font-bold text-white">{session.user.name}</p>
-                <p className="truncate text-[10px] text-zinc-500">{session.user.email}</p>
-                <p className="truncate text-[10px] text-zinc-600 capitalize">{role.toLowerCase()}</p>
-              </div>
-              <LogoutButton />
-            </div>
-          </div>
-        </div>
-      </aside>
+    <div className="min-h-screen bg-zinc-50/50">
+      <DashboardSidebar 
+        business={{ name: business.name, id: business.id }}
+        user={{ name: session.user.name, email: session.user.email }}
+        role={role}
+        initials={initials}
+      />
 
       {/* Main Content */}
-      <main className="ml-68 flex-1 p-8">
-        <div className="mx-auto max-w-7xl animate-in">{children}</div>
+      <main className="lg:ml-64 min-h-screen transition-all duration-300 ease-in-out pt-16 lg:pt-0">
+        <div className="p-4 md:p-8 max-w-7xl mx-auto animate-in">
+          {children}
+        </div>
       </main>
     </div>
   );

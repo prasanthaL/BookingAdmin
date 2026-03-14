@@ -32,15 +32,15 @@ export default function UpgradePage() {
     <div className="min-h-screen bg-[#030303] text-white p-6 py-20 flex flex-col items-center">
       <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-blue-600/10 to-transparent pointer-events-none"></div>
 
-      <div className="relative z-10 max-w-6xl w-full text-center mb-20">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-black uppercase tracking-widest mb-6">
+      <div className="relative z-10 max-w-6xl w-full text-center mb-12 md:mb-20">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] md:text-xs font-black uppercase tracking-widest mb-6">
           <Zap className="h-3 w-3" />
           Trial Completed
         </div>
-        <h1 className="text-6xl font-black tracking-tighter mb-4 italic">
+        <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 italic px-4">
           Level Up Your <span className="text-zinc-500 underline decoration-blue-500 underline-offset-8">Operations</span>
         </h1>
-        <p className="text-zinc-500 font-medium max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="text-zinc-500 font-medium max-w-2xl mx-auto text-base md:text-lg leading-relaxed px-6">
           Your trial has ended. Select a plan below to keep using our premium management tools and grow your hospitality business.
         </p>
       </div>
@@ -49,8 +49,8 @@ export default function UpgradePage() {
         {plans.map((plan) => (
           <div 
             key={plan.name} 
-            className={`glass-panel relative flex flex-col rounded-[2.5rem] p-10 border transition-all duration-500 hover:-translate-y-2 ${
-              plan.popular ? 'border-blue-500/50 bg-blue-500/5 scale-105 z-20 shadow-2xl shadow-blue-500/10' : 'border-white/10 bg-white/5 hover:border-white/20'
+            className={`glass-panel relative flex flex-col rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 border transition-all duration-500 hover:-translate-y-2 ${
+              plan.popular ? 'border-blue-500/50 bg-blue-500/5 md:scale-105 z-20 shadow-2xl shadow-blue-500/10' : 'border-white/10 bg-white/5 hover:border-white/20'
             }`}
           >
             {plan.popular && (

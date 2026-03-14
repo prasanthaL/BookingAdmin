@@ -14,19 +14,19 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-xl relative">
-        <div className="flex flex-col items-center mb-10 text-center animate-in fade-in slide-in-from-bottom-5 duration-700">
-          <div className="h-16 w-16 mb-6 rounded-3xl bg-gradient-to-br from-blue-600 to-purple-600 p-0.5 shadow-2xl shadow-blue-500/20">
-            <div className="h-full w-full rounded-[22px] bg-black flex items-center justify-center">
-              <Sparkles className="h-8 w-8 text-white" />
+        <div className="flex flex-col items-center mb-8 md:mb-10 text-center animate-in fade-in slide-in-from-bottom-5 duration-700">
+          <div className="h-14 w-14 md:h-16 md:w-16 mb-4 md:mb-6 rounded-2xl md:rounded-3xl bg-gradient-to-br from-blue-600 to-purple-600 p-0.5 shadow-2xl shadow-blue-500/20">
+            <div className="h-full w-full rounded-[20px] md:rounded-[22px] bg-black flex items-center justify-center">
+              <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-5xl font-black tracking-tighter text-white mb-2">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2">
             Welcome <span className="text-zinc-500 italic">Back</span>
           </h1>
-          <p className="text-zinc-500 font-medium">Elevating your hotel management experience.</p>
+          <p className="text-zinc-500 font-medium text-sm md:text-base px-4">Elevating your hotel management experience.</p>
         </div>
 
-        <div className="glass-panel relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 p-10 backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-700 delay-100">
+        <div className="glass-panel relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/10 bg-white/5 p-6 md:p-10 backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-700 delay-100">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
           <LoginForm />
         </div>
