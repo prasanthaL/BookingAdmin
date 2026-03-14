@@ -1,0 +1,306 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String?
+  email        String    @unique
+  role         UserRole  @default(ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  businessId   String?
+  isActive     Boolean   @default(true)
+  passwordHash String?
+  accounts     Account[]
+  sessions     Session[]
+  business     Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Business {
+  id                 String             @id @default(cuid())
+  name               String
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  accessStatus       TenantAccessStatus @default(TRIAL)
+  contactEmail       String             @unique
+  contactPhone       String?
+  isActive           Boolean            @default(true)
+  plan               PlanName           @default(STARTER)
+  slug               String             @unique
+  subscriptionEndsAt DateTime?
+  trialEndsAt        DateTime
+  trialStartsAt      DateTime           @default(now())
+  addons             Addon[]
+  bookings           Booking[]
+  guests             Guest[]
+  payments           Payment[]
+  rooms              Room[]
+  roomTypes          RoomType[]
+  subscriptions      Subscription[]
+  users              User[]
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  businessId           String
+  plan                 PlanName
+  provider             BillingProvider    @default(MANUAL)
+  status               SubscriptionStatus @default(TRIALING)
+  trialStartsAt        DateTime?
+  trialEndsAt          DateTime?
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  amount               Decimal?           @db.Decimal(10, 2)
+  currency             String?            @default("LKR")
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  business             Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model RoomType {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  capacity    Int
+  basePrice   Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  businessId  String
+  rooms       Room[]
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id         String     @id @default(cuid())
+  businessId String
+  roomTypeId String
+  roomNumber String
+  floor      Int?
+  status     RoomStatus @default(AVAILABLE)
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  bookings   Booking[]
+  business   Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  roomType   RoomType   @relation(fields: [roomTypeId], references: [id])
+
+  @@unique([businessId, roomNumber])
+}
+
+model Guest {
+  id          String    @id @default(cuid())
+  businessId  String
+  fullName    String
+  phone       String
+  email       String?
+  nicPassport String?
+  nationality String?
+  address     String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Addon {
+  id           String         @id @default(cuid())
+  businessId   String
+  name         String
+  category     String
+  priceType    AddonPriceType
+  unitPrice    Decimal        @db.Decimal(10, 2)
+  active       Boolean        @default(true)
+  description  String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  business     Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  bookingItems BookingAddon[]
+}
+
+model Booking {
+  id           String         @id @default(cuid())
+  businessId   String
+  guestId      String
+  roomId       String
+  bookingNo    String         @unique
+  checkInDate  DateTime
+  checkOutDate DateTime
+  nights       Int
+  adults       Int
+  children     Int            @default(0)
+  status       BookingStatus  @default(PENDING)
+  roomTotal    Decimal        @db.Decimal(10, 2)
+  addonTotal   Decimal        @default(0) @db.Decimal(10, 2)
+  discount     Decimal        @default(0) @db.Decimal(10, 2)
+  grandTotal   Decimal        @db.Decimal(10, 2)
+  paidAmount   Decimal        @default(0) @db.Decimal(10, 2)
+  dueAmount    Decimal        @db.Decimal(10, 2)
+  notes        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  business     Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  guest        Guest          @relation(fields: [guestId], references: [id])
+  room         Room           @relation(fields: [roomId], references: [id])
+  addons       BookingAddon[]
+  checkinLogs  CheckinLog[]
+  checkoutLogs CheckoutLog[]
+  payments     Payment[]
+}
+
+model BookingAddon {
+  id          String      @id @default(cuid())
+  bookingId   String
+  addonId     String
+  serviceDate DateTime?
+  quantity    Int         @default(1)
+  unitPrice   Decimal     @db.Decimal(10, 2)
+  totalPrice  Decimal     @db.Decimal(10, 2)
+  status      AddonStatus @default(PENDING)
+  notes       String?
+  addon       Addon       @relation(fields: [addonId], references: [id])
+  booking     Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  businessId String
+  bookingId  String
+  amount     Decimal       @db.Decimal(10, 2)
+  method     PaymentMethod
+  reference  String?
+  notes      String?
+  createdAt  DateTime      @default(now())
+  booking    Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  business   Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model CheckinLog {
+  id          String   @id @default(cuid())
+  bookingId   String
+  checkedInAt DateTime @default(now())
+  notes       String?
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model CheckoutLog {
+  id           String   @id @default(cuid())
+  bookingId    String
+  checkedOutAt DateTime @default(now())
+  notes        String?
+  booking      Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+enum PlanName {
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum TenantAccessStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  EXPIRED
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum BillingProvider {
+  MANUAL
+  STRIPE
+}
+
+enum RoomStatus {
+  AVAILABLE
+  RESERVED
+  OCCUPIED
+  DIRTY
+  CLEANING
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum AddonStatus {
+  PENDING
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum AddonPriceType {
+  PER_BOOKING
+  PER_DAY
+  PER_NIGHT
+  PER_GUEST
+  PER_HOUR
+  PER_QTY
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  BANK_TRANSFER
+  ONLINE
+}

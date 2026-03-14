@@ -1,0 +1,9 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://neondb_owner:npg_lkSTuY17gHwt@ep-little-tree-a1220ueh-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+}
+
+model Business {
+  id        String   @id @default(cuid())
+  name      String
+}
