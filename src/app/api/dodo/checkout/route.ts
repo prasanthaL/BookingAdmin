@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Business not found" }, { status: 404 });
     }
 
+    const origin = req.nextUrl.origin;
+
     // Build the checkout payload using checkoutSessions.create (non-deprecated)
     const checkoutSession = await dodo.checkoutSessions.create({
       product_cart: [{
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
       billing_address: {
         country: "LK",
       },
-      return_url: `${process.env.NEXTAUTH_URL}/billing/upgrade?success=true`,
+      return_url: `${origin}/billing/upgrade?success=true`,
       metadata: {
         businessId: user.business.id,
         plan,
