@@ -90,6 +90,8 @@ model Subscription {
   currentPeriodEnd     DateTime?
   stripeCustomerId     String?            @unique
   stripeSubscriptionId String?            @unique
+  dodoCustomerId       String?            @unique
+  dodoSubscriptionId   String?            @unique
   amount               Decimal?           @db.Decimal(10, 2)
   currency             String?            @default("LKR")
   createdAt            DateTime           @default(now())
@@ -262,6 +264,7 @@ enum SubscriptionStatus {
 enum BillingProvider {
   MANUAL
   STRIPE
+  DODO_PAYMENTS
 }
 
 enum RoomStatus {
