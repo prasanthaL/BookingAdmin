@@ -10,6 +10,7 @@ import {
   PlusSquare, 
   CreditCard,
   BarChart3,
+  Zap,
   Settings
 } from "lucide-react";
 
@@ -21,6 +22,7 @@ const links = [
   { href: "/addons", label: "Add-ons", icon: PlusSquare },
   { href: "/payments", label: "Payments", icon: CreditCard },
   { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/billing/upgrade", label: "Billing & Plans", icon: Zap },
 ];
 
 export function SidebarNav() {
