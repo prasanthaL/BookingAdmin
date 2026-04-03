@@ -30,7 +30,7 @@ export default function UpgradePage() {
     {
       name: "Enterprise",
       planKey: "ENTERPRISE",
-      price: "Custom",
+      price: "$199",
       description: "For hotel chains and resorts",
       features: [
         "Multi-branch Support",
@@ -86,7 +86,7 @@ export default function UpgradePage() {
 
             <div className="mb-10 flex items-baseline gap-1">
               <span className="text-5xl font-black tracking-tighter">{plan.price}</span>
-              {plan.price !== "Custom" && <span className="text-zinc-500 font-bold">/mo</span>}
+              <span className="text-zinc-500 font-bold">/mo</span>
             </div>
 
             <div className="space-y-4 mb-10 flex-grow">
@@ -104,26 +104,19 @@ export default function UpgradePage() {
               ))}
             </div>
 
-            {plan.price === "Custom" ? (
-              <Button
-                className="w-full h-14 rounded-2xl font-black transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10"
-              >
-                Contact Sales
-              </Button>
-            ) : (
-              <DodoCheckoutButton
-                plan={plan.planKey}
-                label="Upgrade Now"
-                className={`w-full h-14 rounded-2xl font-black transition-all ${
-                  plan.popular
-                    ? "bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/20"
-                    : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
-                }`}
-              />
-            )}
+            <DodoCheckoutButton
+              plan={plan.planKey}
+              label="Upgrade Now"
+              className={`w-full h-14 rounded-2xl font-black transition-all ${
+                plan.popular
+                  ? "bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/20"
+                  : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
+              }`}
+            />
           </div>
         ))}
       </div>
+
 
       <p className="mt-20 text-zinc-600 text-sm font-medium flex items-center gap-2">
         <ShieldCheck className="h-4 w-4" />
